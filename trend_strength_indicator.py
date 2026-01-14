@@ -20,5 +20,5 @@ class strength(bt.Indicator):
         slope = abs(self.ma_slope[0])/self.data.close[0]
         slope_s = math.tanh(slope*10)
         s = (self.p.adx_w*adx_s+self.p.ma_w*slope_s) 
-        self.lines.strength[0] = s #final strength
+        self.lines.strength[0] = s #final  strength
         self.lines.risk[0] = 1.0 - s #final risk
