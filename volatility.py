@@ -9,9 +9,8 @@ class VolatilityRisk:
         self.vol_cap = vol_cap
         self.epsilon = epsilon
 
-    # ---------------------------------------------------
     # 1. RAW VOLATILITY
-    # ---------------------------------------------------
+    
     def raw_volatility(self, returns, annualized=True):
         returns = np.array(returns)
 
@@ -22,9 +21,8 @@ class VolatilityRisk:
 
         return float(vol)
 
-    # ---------------------------------------------------
     # 2. ROLLING VOLATILITY (REGIME AWARE)
-    # ---------------------------------------------------
+
     def rolling_volatility(self, returns, window=20, annualized=True):
         returns = pd.Series(returns)
         vol = returns.rolling(window).std() + self.epsilon
@@ -34,9 +32,8 @@ class VolatilityRisk:
 
         return vol
 
-    # ---------------------------------------------------
     # 3. VOLATILITY → RISK CONVERSION
-    # ---------------------------------------------------
+
     def volatility_risk(self, returns):
         vol = self.raw_volatility(returns)
 
@@ -44,9 +41,8 @@ class VolatilityRisk:
         risk = vol / (self.vol_cap + self.epsilon)
         return float(np.clip(risk, 0.0, 1.0))
 
-    # ---------------------------------------------------
     # 4. ROLLING VOLATILITY RISK
-    # ---------------------------------------------------
+
     def rolling_volatility_risk(self, returns, window=20):
         vol_series = self.rolling_volatility(returns, window)
         return np.clip(vol_series / (self.vol_cap + self.epsilon), 0.0, 1.0)
