@@ -8,9 +8,8 @@ class KellyRisk:
         self.cap = cap
         self.epsilon = epsilon
 
-    # ---------------------------------------------------
     # 1. RAW KELLY COMPUTATION
-    # ---------------------------------------------------
+
     def raw_kelly(self, returns):
         returns = np.array(returns)
 
@@ -20,9 +19,8 @@ class KellyRisk:
         kelly = mu / var
         return float(np.clip(kelly, -self.cap, self.cap))
 
-    # ---------------------------------------------------
     # 2. ROLLING KELLY (REGIME AWARE)
-    # ---------------------------------------------------
+
     def rolling_kelly(self, returns, window=50):
         returns = pd.Series(returns)
 
@@ -33,9 +31,8 @@ class KellyRisk:
 
         return returns.rolling(window).apply(_kelly, raw=False)
 
-    # ---------------------------------------------------
     # 3. KELLY → RISK CONVERSION
-    # ---------------------------------------------------
+
     def kelly_risk(self, returns):
         kelly = self.raw_kelly(returns)
 
@@ -46,9 +43,7 @@ class KellyRisk:
         risk = 1.0 - kelly_norm
         return float(np.clip(risk, 0.0, 1.0))
 
-    # ---------------------------------------------------
     # 4. ROLLING KELLY RISK
-    # ---------------------------------------------------
     def rolling_kelly_risk(self, returns, window=50):
         kelly_series = self.rolling_kelly(returns, window)
         return 1.0 - ((kelly_series + self.cap) / (2 * self.cap))
